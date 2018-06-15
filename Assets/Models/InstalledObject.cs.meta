@@ -1,12 +1,11 @@
 fileFormatVersion: 2
-guid: 8ec2e07b0ce5d4739af42dab7110d4e7
-timeCreated: 1529026778
+guid: e4b86edc06a5c417fb0f4051c2c187de
+timeCreated: 1529030202
 licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - GrassSprite: {fileID: 21300000, guid: 2e3b69743812b4373aec77626167463a, type: 3}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

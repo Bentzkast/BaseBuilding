@@ -7,8 +7,17 @@ namespace Basebuilding
 	public class World
 	{
 		Tile[,] tiles;
-		int width;
-		int height;
+		readonly int width;
+		readonly int height;
+
+		public int Width
+		{
+			get{ return width;}
+		}      
+		public int Height
+		{
+			get{return height;}
+		}
 
 		public World(int width = 100, int height = 100)
 		{
@@ -33,6 +42,18 @@ namespace Basebuilding
 				return null;
 			}
 			return tiles[x, y];
+		}     
+
+        public void RandomizeTile()
+		{
+			Debug.Log("RandomizeTile");
+			for (int x = 0; x < width; x++)
+			{
+				for (int y = 0; y < height; y++)
+				{
+					tiles[x, y].TileType = (Tile.Type)Random.Range(0, 3);
+				}
+			}
 		}
     }
 }
