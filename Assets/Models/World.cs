@@ -34,11 +34,11 @@ namespace Basebuilding
 			Debug.Log("World created of size " + width + " x " + height);
 		}
 
-		public Tile GetTile(int x, int y)
+		public Tile GetTileAtPos(int x, int y)
 		{
 			if(x < 0 || x > width || y < 0 || y > height)
 			{
-				Debug.LogError("Invalid tile coordinate (" + x + "," + y + ")");
+				Debug.LogWarning("Invalid tile coordinate (" + x + "," + y + ")");
 				return null;
 			}
 			return tiles[x, y];
@@ -51,7 +51,7 @@ namespace Basebuilding
 			{
 				for (int y = 0; y < height; y++)
 				{
-					tiles[x, y].TileType = (Tile.Type)Random.Range(0, 3);
+					tiles[x, y].Type = (Tile.TileType)Random.Range(0, 2);
 				}
 			}
 		}

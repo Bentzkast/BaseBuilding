@@ -5,67 +5,72 @@ using UnityEngine;
 namespace Basebuilding
 {
 	public class WorldController : MonoBehaviour
-    {
+	{
+
 		public Sprite GrassSprite;
 		public Sprite SeaSprite;
 
+		// The only World controller instance
+		public static WorldController Instance { get; protected set; }
+
 		GameObject worldHolder;
-		World world;
-               
-        void Start()
+		public World World{ get; protected set; }
+
+		private void Awake()
+		{
+			if(Instance != null)
+			{
+				Debug.LogError("The should be only one world controller");
+                Destroy(this);
+				return;
+
+			}
+			Instance = this;
+		}
+
+
+		void Start()
         {
 			// Data
-			world = new World();
-            
+			World = new World();
+
             // create the GameObjects for visual
 			worldHolder = new GameObject();
-            worldHolder.name = "World_Holder";
-			for (int x = 0; x < world.Width; x++)
+			worldHolder.name = "World_Holder";
+			for (int x = 0; x < World.Width; x++)
 			{
-				for (int y = 0; y < world.Height; y++)
+				for (int y = 0; y < World.Height; y++)
 				{
-					Tile tileData = world.GetTile(x, y);
+					Tile tileData = World.GetTileAtPos(x, y);
 					GameObject tileGO = new GameObject();
-					tileGO.transform.parent = worldHolder.transform;
+					tileGO.transform.SetParent(worldHolder.transform,true);
 					tileGO.name = "Tile (" + x + "," + y + ")";
 					tileGO.transform.position = new Vector3(x, y, 0);
+					// TODO : set sorting layer?
 					tileGO.AddComponent<SpriteRenderer>();
+
+                    // initial sprite setup
+					OnTileTypeChange(tileData, tileGO);
+
+                    // register callback
 					tileData.RegisterTileTypeChangeCB((Tile tile) => { OnTileTypeChange(tile, tileGO); });
 				}
 			}
-
+			World.RandomizeTile();
 		}
-
-		float timer = 2f;
-		// Update is called once per frame
-        void Update()
-        {
-			timer -= Time.deltaTime;
-			if (timer > 0)
-			{
-				return;
-			}
-			timer += 2f;
-
-			world.RandomizeTile();
-        }
-
-         
-
+              
+        // set the tile sprite based on its type
 		void OnTileTypeChange(Tile tileData,GameObject tileGO)
         {
 			SpriteRenderer tileSR = tileGO.GetComponent<SpriteRenderer>();
-
-			switch(tileData.TileType)
+            
+			switch(tileData.Type)
 			{
-				case Tile.Type.Grassland:
+				case Tile.TileType.Grassland:
 					tileSR.sprite = GrassSprite;
 					break;
-				case Tile.Type.Sea:
+				case Tile.TileType.Sea:
 					tileSR.sprite = SeaSprite;
-                    break;
-				case Tile.Type.Empty:
-					tileSR.sprite = null;
                     break;
 				default:
 					Debug.LogError("OnTileTypeChange - Invalid tile Types");

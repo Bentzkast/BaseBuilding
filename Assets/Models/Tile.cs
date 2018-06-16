@@ -4,64 +4,43 @@ namespace Basebuilding
 {
 	public class Tile
 	{
-
-		public enum Type { Empty, Grassland, Sea };
-		Type tileType = Type.Empty;
-
-		int x;
-		int y;
-
+        // terrain type
+		public enum TileType { Sea, Grassland };
+		TileType _tileType = TileType.Sea;
+  
+       
 		World world;
+        // building, mountain, wall etc
 		InstalledObject installedObject;
+        // units, resouces, weapon
 		LooseObject looseObject;
 
+        // callbacks
 		Action<Tile> TileTypeChangeCB;
-		Type oldTileType;
+		TileType _oldTileType;
 
-		public int X
+		public int X { get; protected set; }
+		public int Y { get; protected set; }
+
+		public TileType Type
 		{
 			get
 			{
-				return x;
+				return _tileType;
 			}
 
 			set
 			{
-				x = value;
-			}
-		}
-
-		public int Y
-		{
-			get
-			{
-				return y;
-			}
-
-			set
-			{
-				y = value;
-			}
-		}
-
-		public Type TileType
-		{
-			get
-			{
-				return tileType;
-			}
-
-			set
-			{
-				oldTileType = tileType;
-				tileType = value;
-				if (TileTypeChangeCB != null && tileType != oldTileType)
+				_oldTileType = _tileType;
+				_tileType = value;
+				if (TileTypeChangeCB != null && _tileType != _oldTileType)
 				{
 					TileTypeChangeCB(this);
 				}
 			}
 		}
 
+        // constructor 
 		public Tile(World world, int x, int y)
 		{
 			this.world = world;
@@ -69,6 +48,7 @@ namespace Basebuilding
 			this.Y = y;
 		}
 
+        // callback
 		public void RegisterTileTypeChangeCB(Action<Tile> action)
 		{
 			TileTypeChangeCB += action;
